@@ -129,7 +129,7 @@ function customDetection(req){
 
   ipAddress = req.connection.remoteAddress.replace(/\//g, '.');
 
-  return ipAddress;
+  return [ipAddress];
 }
 
 ipfilter(ids, {detectIps: customDetection});
