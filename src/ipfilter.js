@@ -59,7 +59,7 @@ module.exports = function ipfilter(ips, opts) {
     allowedHeaders: [],
     allowPrivateIPs: false,
     excluding: [],
-    detectIp: getClientIp
+    detectIps: getClientIp
   });
 
   function getClientIp(req) {
@@ -200,7 +200,7 @@ module.exports = function ipfilter(ips, opts) {
       }
     }
 
-    var ips = settings.detectIp(req);
+    var ips = settings.detectIps(req);
 
     var matchResults = ips.map(function(ip) {
       return matchClientIp(ip);

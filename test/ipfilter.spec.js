@@ -1045,7 +1045,7 @@ describe('mixing different types of filters with IPv4 and IPv6', function () {
 
 describe('using a custom ip detection function', function(){
   beforeEach(function () {
-    function detectIp(req){
+    function detectIps(req){
       var ipAddress;
 
       ipAddress = req.connection.remoteAddress.replace(/\//g, '.');
@@ -1053,7 +1053,7 @@ describe('using a custom ip detection function', function(){
       return [ipAddress];
     }
 
-    this.ipfilter = ipfilter(['127.0.0.1'], { detectIp: detectIp, log: false, allowedHeaders: ['x-forwarded-for'] });
+    this.ipfilter = ipfilter(['127.0.0.1'], { detectIps: detectIps, log: false, allowedHeaders: ['x-forwarded-for'] });
     this.req = {
       session: {},
       headers: [],

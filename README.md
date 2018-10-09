@@ -117,9 +117,9 @@ You will need to require the `IpDeniedError` type in order to handle it.
 | logLevel | level of logging (*all*,*deny*,*allow*) | string | all
 | allowedHeaders | an array of strings for header names that are acceptable for retrieving an IP address | array | [] |
 | excluding   | routes that should be excluded from ip filtering | array|[]|
-| detectIp | define a custom function that takes an Express request object and returns an IP address to test against | function | built-in detection |
+| detectIps | define a custom function that takes an Express request object and returns an array of IP addresses to test against | function | built-in detection |
 
-> A note on detectIp
+> A note on detectIps
 
 If you need to parse an IP address in a way that is not supported by default, you can write your own parser and pass that to `ipfilter`.
 
@@ -132,7 +132,7 @@ function customDetection(req){
   return ipAddress;
 }
 
-ipfilter(ids, {detectIp: customDetection});
+ipfilter(ids, {detectIps: customDetection});
 
 ```
 
