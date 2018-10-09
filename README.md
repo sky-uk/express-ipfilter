@@ -117,9 +117,9 @@ You will need to require the `IpDeniedError` type in order to handle it.
 | logLevel | level of logging (*all*,*deny*,*allow*) | string | all
 | allowedHeaders | an array of strings for header names that are acceptable for retrieving an IP address | array | [] |
 | excluding   | routes that should be excluded from ip filtering | array|[]|
-| detectIp | define a custom function that takes an Express request object and returns an IP address to test against | function | built-in detection |
+| detectIps | define a custom function that takes an Express request object and returns an array of IP addresses to test against | function | built-in detection |
 
-> A note on detectIp
+> A note on detectIps
 
 If you need to parse an IP address in a way that is not supported by default, you can write your own parser and pass that to `ipfilter`.
 
@@ -129,10 +129,10 @@ function customDetection(req){
 
   ipAddress = req.connection.remoteAddress.replace(/\//g, '.');
 
-  return ipAddress;
+  return [ipAddress];
 }
 
-ipfilter(ids, {detectIp: customDetection});
+ipfilter(ids, {detectIps: customDetection});
 
 ```
 
@@ -155,6 +155,10 @@ Run tests by using
 This will run `eslint`,`babel`, and `mocha` and output coverage data into `coverage`.  Any pull request you submit needs to be accompanied by a test.
 
 ## Changelog
+
+1.0.0
+ * Backwards incompatible change to ensure where a header provides a comma-delimited list of IPs - _all_ of those IPs must satisfy the whitelist or blacklist. This prevents forging an IP address as long as a trusted proxy will update the header in transit.
+ * `detectIp` has become `detectIps` and now returns an array of IP addresses rather than a single string.
 
 0.3.1
  * Fixes critical bug that allowed access when ips is empty and mode == 'allow'.
