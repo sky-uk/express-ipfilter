@@ -169,8 +169,8 @@ module.exports = function ipfilter(ips, opts) {
     }
   };
 
-  var error = function(ip, next) {
-    var err = new IpDeniedError('Access denied to IP address: ' + ip);
+  var error = function(ips, next) {
+    var err = new IpDeniedError('Access denied to IP address: ' + ips.join(','));
     return next(err);
   };
 
@@ -193,19 +193,23 @@ module.exports = function ipfilter(ips, opts) {
     if (!_ips || !_ips.length) {
       if (settings.mode == 'allow') {
         // ip list is empty, thus no one allowed
-        return error('0.0.0.0/0', next);
+        return error(['0.0.0.0/0'], next);
       } else {
         // there are no blocked ips, skip
         return next();
       }
     }
 
-    var ip = settings.detectIp(req);
+    var ips = settings.detectIp(req);
 
-    if (matchClientIp(ip, req)) {
+    var matchResults = ips.map(function(ip) {
+      return matchClientIp(ip);
+    });
+
+    if (_.every(matchResults)) {
       // Grant access
       if (settings.log && settings.logLevel !== 'deny') {
-        settings.logF('Access granted to IP address: ' + ip);
+        settings.logF('Access granted to IP address: ' + ips.join(','));
       }
 
       return next();
@@ -213,9 +217,9 @@ module.exports = function ipfilter(ips, opts) {
 
     // Deny access
     if (settings.log && settings.logLevel !== 'allow') {
-      settings.logF('Access denied to IP address: ' + ip);
+      settings.logF('Access denied to IP address: ' + ips.join(','));
     }
 
-    return error(ip, next);
+    return error(ips, next);
   };
 };

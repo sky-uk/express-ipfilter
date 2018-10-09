@@ -1040,7 +1040,7 @@ describe('using a custom ip detection function', function(){
 
       ipAddress = req.connection.remoteAddress.replace(/\//g, '.');
 
-      return ipAddress;
+      return [ipAddress];
     }
 
     this.ipfilter = ipfilter(['127.0.0.1'], { detectIp: detectIp, log: false, allowedHeaders: ['x-forwarded-for'] });
