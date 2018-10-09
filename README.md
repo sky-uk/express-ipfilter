@@ -156,6 +156,10 @@ This will run `eslint`,`babel`, and `mocha` and output coverage data into `cover
 
 ## Changelog
 
+1.0.0
+ * Backwards incompatible change to ensure where a header provides a comma-delimited list of IPs - _all_ of those IPs must satisfy the whitelist or blacklist. This prevents forging an IP address as long as a trusted proxy will update the header in transit.
+ * `detectIp` has become `detectIps` and now returns an array of IP addresses rather than a single string.
+
 0.3.1
  * Fixes critical bug that allowed access when ips is empty and mode == 'allow'.
  * Adds minor speed improvements for middleware.
